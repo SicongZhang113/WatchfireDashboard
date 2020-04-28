@@ -27,7 +27,7 @@ class Orders extends React.Component {
         let data = []
         let i = 0;
         for( i ; i < 195; i++){
-            data.push({model:0, time:0, quantity:0, prediction: 0})
+            data.push({model:0, time:0, quantity:0, prediction: 0, IBC_prediction:0})
         }
      return data;
     }
@@ -57,6 +57,7 @@ class Orders extends React.Component {
             columns.push(<TableCell>{this.state.data_quantity[i].time}</TableCell>)
             columns.push(<TableCell>{this.state.data_quantity[i].quantity}</TableCell>)
             columns.push(<TableCell>{this.state.data_quantity[i].prediction}</TableCell>)
+            columns.push(<TableCell>{this.state.data_quantity[i].IBC_prediction}</TableCell>)
             //Create the parent and add the children
             table.push(<TableRow key= {i}>{columns}</TableRow>)
         }
@@ -91,16 +92,13 @@ class Orders extends React.Component {
                              onChange={handleChange}
                              >
                              <option aria-label="None" value="" />
-                             <option value={'2219 (Includes T/T)'}>2219 (Includes T/T)</option>
-                             <option value={'S16'}>S16</option>
-                             <option value={'W08'}>W08</option>
+                             <option value={'2219'}>2219</option>
+                             <option value={'W8'}>W8</option>
                              <option value={'W10'}>W10</option>
-                             <option value={'W12'}>W12</option>
                              <option value={'W16'}>W16</option>
                              <option value={'W19'}>W19</option>
-                             <option value={'X08'}>X08</option>
+                             <option value={'X8'}>X8</option>
                              <option value={'X10'}>X10</option>
-                             <option value={'X12'}>X12</option>
                              <option value={'X16'}>X16</option>
                              <option value={'X19'}>X19</option>
                          </Select>
@@ -112,7 +110,8 @@ class Orders extends React.Component {
                                 <TableCell>Model</TableCell>
                                 <TableCell>Date</TableCell>
                                 <TableCell>Historical data</TableCell>
-                                <TableCell>Predict data</TableCell>
+                                <TableCell>Firm Prediction</TableCell>
+                                <TableCell>IBC Prediciton</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

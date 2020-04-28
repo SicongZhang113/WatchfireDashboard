@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { ComposedChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, Legend,Area } from 'recharts';
 import Title from './Title';
 import $ from "jquery";
 import { withTheme } from '@material-ui/core/styles';
@@ -19,7 +19,7 @@ class Chart extends React.Component{
         let data = []
         let i = 0;
         for( i ; i < 10; i++){
-            data.push({ time:0, quantity:i})
+            data.push({ time:0, quantity:i, firm_prediction:0, IBC_prediction: 0, sd_interval:[10,20]})
         }
      return data;
     }
@@ -63,16 +63,13 @@ class Chart extends React.Component{
 
           }}
         >
-            <option value={'2219 (Includes T/T)'}>2219 (Includes T/T)</option>
-            <option value={'S16'}>S16</option>
-            <option value={'W08'}>W08</option>
+            <option value={'2219'}>2219</option>
+            <option value={'W8'}>W8</option>
             <option value={'W10'}>W10</option>
-            <option value={'W12'}>W12</option>
             <option value={'W16'}>W16</option>
             <option value={'W19'}>W19</option>
-            <option value={'X08'}>X08</option>
+            <option value={'X8'}>X8</option>
             <option value={'X10'}>X10</option>
-            <option value={'X12'}>X12</option>
             <option value={'X16'}>X16</option>
             <option value={'X19'}>X19</option>
         </Select>
@@ -80,7 +77,7 @@ class Chart extends React.Component{
 
       <Title>Quantity vs. Date</Title>
       <ResponsiveContainer>
-        <LineChart
+        <ComposedChart
           data={this.state.data}
           margin={{
             top: 16,
@@ -89,7 +86,7 @@ class Chart extends React.Component{
             left: 34,
           }}
         >
-          <XAxis dataKey="time"  stroke={this.props.theme.palette.text.secondary} />
+          <XAxis dataKey="time"  stroke={this.props.theme.palette.text.secondary} padding={{ left: 30, right: 30 }}/>
           <YAxis dataKey="quantity" stroke={this.props.theme.palette.text.secondary}>
             <Label
               angle={270}
@@ -99,8 +96,13 @@ class Chart extends React.Component{
               Quantity
             </Label>
           </YAxis>
-          <Line type="monotone" dataKey="quantity" stroke={this.props.theme.palette.primary.main} dot={false} />
-        </LineChart>
+            <Tooltip />
+            <Legend />
+          <Line type="monotone" dataKey="quantity" stroke={this.props.theme.palette.primary.main} />
+          <Line type="monotone" dataKey="IBC_prediction" stroke="#82ca9d" activeDot={{ r: 8 }}/>
+          <Line type="monotone" dataKey="firm_prediction" stroke="#FF0000" />
+          <Area dataKey="sd_interval" stroke="#8884d8" fill="#8884d8" />
+        </ComposedChart>
       </ResponsiveContainer>
     </React.Fragment>
   )
