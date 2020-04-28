@@ -1,18 +1,37 @@
 from flask import Flask, jsonify, request
 import pymysql
+import mysql.connector
 
 app = Flask(__name__)
 
 
 def getConnection():
-    return pymysql.connect(host="127.0.0.1",
-                           port=3306,
-                           user="root",
-                           passwd="Louise113.",
-                           database="data",
-                           charset='utf8')
+    # return pymysql.connect(host="ibcserver2020.mysql.database.azure.com",
+    #                        port=20362,
+    #                        user="ibc@ibcserver2020",
+    #                        passwd="WATCHfire!",
+    #                        database="watchfire",
+    #                        charset='utf8')
+    # return pymysql.connect(user="ibc" + '@' + "ibcserver2020",
+    #                        password="WATCHfire!",
+    #                        host="ibcserver2020.mysql.database.azure.com",
+    #                        port=3306,
+    #                        db="watchfire",
+    #                        cursorclass=pymysql.cursors.DictCursor,
+    #                        autocommit=True,
+    #                        ssl={'ca': certpath})
+    config = {
+        'host': 'ibcserver2020.mysql.database.azure.com',
+        'user': 'ibc@ibcserver2020',
+        'password': 'WATCHfire!',
+        'database': 'watchfire'
+    }
+    return mysql.connector.connect(**config)
+
 
 mod = ""
+
+
 @app.route('/api/tasks', methods=['GET', 'POST'])
 def get_all_tasks():
     global mod
