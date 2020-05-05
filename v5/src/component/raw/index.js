@@ -13,22 +13,12 @@ import {mainListItems} from "../dashboard/listItems";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Chart from "../dashboard/Chart";
-import Deposits from "../dashboard/Deposits";
-import Orders from "../dashboard/Orders";
-import Box from "@material-ui/core/Box";
 import {makeStyles} from "@material-ui/core/styles";
+import RawList from './list'
+import Fab from "@material-ui/core/Fab";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import './index.module.css'
 
-// const Raw = () => {
-//     return (
-//        <div>
-//           <h1>Raw data</h1>
-//           <p>this is the raw data page</p>
-//        </div>
-//     );
-// }
-//
-// export default Raw;
 
 const drawerWidth = 240;
 
@@ -104,11 +94,18 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     display: 'flex',
     overflow: 'auto',
+    //justifyContent: 'spaceAround',
+    //alignItems: 'flexStart',
     flexDirection: 'column',
   },
   fixedHeight: {
     height: 240,
   },
+  sticky:{
+    position:'sticky',
+    bottom:theme.spacing(0),
+    top:theme.spacing(10),
+  }
 }));
 
 export default function Raw() {
@@ -160,7 +157,24 @@ export default function Raw() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+
         <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={2}>
+          <Grid item xs = {1} >
+            <Fab
+                color="secondary"
+                aria-label="add"
+                className={classes.sticky}
+                href = '/add'>
+              <AddCircleIcon />
+            </Fab>
+          </Grid>
+          <Grid item xs = {11}>
+            <Paper className={classes.paper}>
+             <RawList/>
+            </Paper>
+            </Grid>
+          </Grid>
         </Container>
       </main>
     </div>

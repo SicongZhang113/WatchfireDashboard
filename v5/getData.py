@@ -5,6 +5,8 @@ from mysql.connector import errorcode
 
 app = Flask(__name__)
 
+count = 402
+
 
 def getConnection():
     config = {
@@ -49,8 +51,9 @@ def get_all_tasks():
                 sql = "SELECT * FROM watchfire_data WHERE model = '{}' ORDER BY time DESC".format(mod)
             cur.execute(sql)
             tasks = []
-            for model, time, quantity, prediction, IBC_Pred, Stdev in cur.fetchall():
+            for id, model, time, quantity, prediction, IBC_Pred, Stdev in cur.fetchall():
                 task = dict()
+                task['id'] = id
                 task['model'] = model
                 task['time'] = time
                 task['quantity'] = quantity
@@ -108,8 +111,11 @@ def select():
             print("Done.")
             return jsonify(tasks)
 
+
 m = "2219"
-@app.route('/api/deposit', methods=['GET','POST'])
+
+
+@app.route('/api/deposit', methods=['GET', 'POST'])
 def get_prediction():
     global m
     if request.method == 'POST':
@@ -142,6 +148,56 @@ def get_prediction():
             cur.close()
             return jsonify(tasks)
 
+
+@app.route('/api/delete/<id>', methods=['POST'])
+def delete(id):
+    try:
+        db = getConnection()
+        print("Connection established")
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with the user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
+    else:
+        cur = db.cursor()
+        sql = "DELETE FROM watchfire_data WHERE id = '{}'".format(id)
+        print(sql)
+        cur.execute(sql)
+        # Cleanup
+        db.commit()
+        cur.close()
+        return jsonify({'result': True})
+
+
+@app.route('/api/add', methods=['POST'])
+def add():
+    try:
+        db = getConnection()
+        print("Connection established")
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with the user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
+    else:
+        model = request.form.get('model')
+        id = request.form.get('id')
+        time = request.form.get('time')
+        real = request.form.get('historical')
+        firm = request.form.get('firm_prediction')
+        IBC = request.form.get('IBC_prediction')
+        cur = db.cursor()
+        sql = "INSERT INTO watchfire_data VALUES({},'{}',DATE('{}'),{},{},{}, NULL)".format(id, model, time, real, firm, IBC)
+        print(sql)
+        cur.execute(sql)
+        db.commit()
+        cur.close()
+        return jsonify({'result': True})
 
 
 if __name__ == '__main__':

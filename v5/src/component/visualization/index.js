@@ -12,6 +12,7 @@ import List from "@material-ui/core/List";
 import {mainListItems} from "../dashboard/listItems";
 import Container from "@material-ui/core/Container";
 import {makeStyles} from "@material-ui/core/styles";
+import "../raw/index.module.css"
 
 
 const drawerWidth = 240;
