@@ -104,7 +104,7 @@ const useStyles = makeStyles(theme => ({
   sticky:{
     position:'sticky',
     bottom:theme.spacing(0),
-    top:theme.spacing(10),
+    top:theme.spacing(95),
   }
 }));
 
